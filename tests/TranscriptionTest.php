@@ -3,9 +3,12 @@
 namespace Tests;
 
 use ArrayAccess;
+use JsonSerializable;
 use LorenzoMilesi\Transcript\Line;
 use LorenzoMilesi\Transcript\Transcription;
 use PHPUnit\Framework\TestCase;
+
+use function json_encode;
 
 class TranscriptionTest extends TestCase
 {
@@ -61,6 +64,16 @@ class TranscriptionTest extends TestCase
     {
         $this->assertInstanceOf(ArrayAccess::class, $this->transcription->lines());
         $this->assertContainsOnlyInstancesOf(Line::class, $this->transcription->lines());
+    }
+
+    /**
+     * @test
+     * @covers
+     */
+    public function it_can_render_as_json(): void
+    {
+        $this->assertInstanceOf(JsonSerializable::class, $this->transcription->lines());
+        $this->assertJson(json_encode($this->transcription->lines()));
     }
 
     protected function setUp(): void

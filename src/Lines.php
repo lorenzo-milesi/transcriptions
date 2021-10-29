@@ -8,15 +8,16 @@ use Countable;
 
 use IteratorAggregate;
 
+use JsonSerializable;
+
 use function array_map;
 use function implode;
 
 use function is_null;
-use function PHPUnit\Framework\isNull;
 
 use const PHP_EOL;
 
-class Lines implements Countable, IteratorAggregate, ArrayAccess
+class Lines implements Countable, IteratorAggregate, ArrayAccess, JsonSerializable
 {
     /**
      * @param  array<Line>  $lines
@@ -63,5 +64,10 @@ class Lines implements Countable, IteratorAggregate, ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->lines[$offset]);
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->lines;
     }
 }
