@@ -2,6 +2,7 @@
 
 namespace LorenzoMilesi\Transcript;
 
+use ArrayAccess;
 use ArrayIterator;
 use Countable;
 
@@ -10,9 +11,12 @@ use IteratorAggregate;
 use function array_map;
 use function implode;
 
+use function is_null;
+use function PHPUnit\Framework\isNull;
+
 use const PHP_EOL;
 
-class Lines implements Countable, IteratorAggregate
+class Lines implements Countable, IteratorAggregate, ArrayAccess
 {
     /**
      * @param  array<Line>  $lines
@@ -35,5 +39,29 @@ class Lines implements Countable, IteratorAggregate
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->lines);
+    }
+
+    public function offsetExists($offset): bool
+    {
+        return isset($this->lines[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->lines[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        if(is_null($offset)) {
+            $this->lines[] = $value;
+        } else {
+            $this->lines[$offset] = $value;
+        }
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->lines[$offset]);
     }
 }

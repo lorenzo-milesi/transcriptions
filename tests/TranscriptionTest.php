@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use ArrayAccess;
 use LorenzoMilesi\Transcript\Line;
 use LorenzoMilesi\Transcript\Transcription;
 use PHPUnit\Framework\TestCase;
@@ -50,6 +51,16 @@ class TranscriptionTest extends TestCase
             EOT;
 
         $this->assertEquals($expected, $this->transcription->lines()->asHtml());
+    }
+
+    /**
+     * @test
+     * @covers Lines
+     */
+    public function it_supports_array_access(): void
+    {
+        $this->assertInstanceOf(ArrayAccess::class, $this->transcription->lines());
+        $this->assertContainsOnlyInstancesOf(Line::class, $this->transcription->lines());
     }
 
     protected function setUp(): void
